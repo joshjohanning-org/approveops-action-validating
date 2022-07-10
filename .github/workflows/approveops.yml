@@ -1,0 +1,32 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    - name: ApproveOps - ApproveOps in IssueOps
+      uses: joshjohanning/approveops@v1
+      id: check-approval
+      with:
+        app-id: 170284 # The GitHub App ID; ie: 170284
+        app-private-key: 12345 # Private key for the GitHub App that is installed on the repo; e.g.: ${{ secrets.PRIVATE_KEY }}
+        team-name: approver-team # The name of the team in GitHub to check for the approval command; e.g.: approver-team
+        fail-if-approval-not-found: false # Fail the action (show the action run as red) if the command is not found in the comments from someone in the approver team"
