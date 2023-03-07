@@ -1,32 +1,31 @@
-# This is a basic workflow to help you get started with Actions
-
-name: CI
-
-# Controls when the workflow will run
+name: ApproveOps
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+  issue_comment:
+    types: [created]
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+env:
+  action_command: '/do-stuff'
+  approver_team_name: 'approver-team'
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  approveops:
     runs-on: ubuntu-latest
+    if: contains(github.event.comment.body, '${{ env.action_command }}')
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+    # get the app's installation token
+    - uses: tibdex/github-app-token@v1
+      id: get_installation_token
+      with:
+        app_id: 170284
+        private_key: ${{ secrets.APP_PRIVATE_KEY }}
+        
     - name: ApproveOps - ApproveOps in IssueOps
-      uses: joshjohanning/approveops@v1.0.2
+      uses: joshjohanning/approveops@v2
       id: check-approval
       with:
-        app-id: 170284 # The GitHub App ID; ie: 170284
-        app-private-key: 12345 # Private key for the GitHub App that is installed on the repo; e.g.: ${{ secrets.PRIVATE_KEY }}
-        team-name: approver-team # The name of the team in GitHub to check for the approval command; e.g.: approver-team
+        token: ${{ steps.get_installation_token.outputs.token }} # use a github app token or a PAT
+        team-name: ${{ env.approver_team_name }} # The name of the team in GitHub to check for the approval command; e.g.: approver-team
         fail-if-approval-not-found: false # Fail the action (show the action run as red) if the command is not found in the comments from someone in the approver team"
+        post-successful-approval-comment: true # Boolean whether to post successful approval comment
+        successful-approval-comment: ':tada:  You were able to run the workflow because someone left an approval in the comments!! :tada:' # Comment to post if there is an approval is found
