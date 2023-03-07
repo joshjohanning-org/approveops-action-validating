@@ -10,7 +10,7 @@ env:
 jobs:
   approveops:
     runs-on: ubuntu-latest
-    if: contains(github.event.comment.body, '${{ env.action_command }}')
+    if: contains(github.event.comment.body, ${{ env.action_command }})
 
     steps:
     # get the app's installation token
