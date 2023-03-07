@@ -4,13 +4,12 @@ on:
     types: [created]
 
 env:
-  action_command: '/do-stuff'
   approver_team_name: 'approver-team'
 
 jobs:
   approveops:
     runs-on: ubuntu-latest
-    if: contains(github.event.comment.body, ${{ env.action_command }})
+    if: contains(github.event.comment.body, '/do-stuff')
 
     steps:
     # get the app's installation token
