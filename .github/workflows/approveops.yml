@@ -24,5 +24,5 @@ jobs:
         approve-command: '/approved'
         team-name: 'approver-team' # The name of the team in GitHub to check for the approval command; e.g.: approver-team
         fail-if-approval-not-found: true # Fail the action (show the action run as red) if the command is not found in the comments from someone in the approver team"
-        post-successful-approval-comment: false # Boolean whether to post successful approval comment
+        post-successful-approval-comment: true # Boolean whether to post successful approval comment
         successful-approval-comment: ':tada:  You were able to run the workflow because someone left an approval in the comments!! :tada:' # Comment to post if there is an approval is found
