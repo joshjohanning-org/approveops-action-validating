@@ -3,9 +3,6 @@ on:
   issue_comment:
     types: [created]
 
-env:
-  approver_team_name: 'approver-team'
-
 jobs:
   approveops:
     runs-on: ubuntu-latest
@@ -13,19 +10,19 @@ jobs:
 
     steps:
     # get the app's installation token
-    - uses: tibdex/github-app-token@v1
-      id: get_installation_token
+    - uses: actions/create-github-app-token@v1
+      id: app-token
       with:
-        app_id: 170284
-        private_key: ${{ secrets.APP_PRIVATE_KEY }}
+        app-id: ${{ vars.APP_ID }}
+        private-key: ${{ secrets.PRIVATE_KEY }}
         
     - name: ApproveOps - ApproveOps in IssueOps
-      uses: joshjohanning/approveops@v2
+      uses: joshjohanning/approveops@enhancements
       id: check-approval
       with:
-        approve-command: '/approved'
         token: ${{ steps.get_installation_token.outputs.token }} # use a github app token or a PAT
-        team-name: ${{ env.approver_team_name }} # The name of the team in GitHub to check for the approval command; e.g.: approver-team
+        approve-command: '/approved'
+        team-name: 'approver-team' # The name of the team in GitHub to check for the approval command; e.g.: approver-team
         fail-if-approval-not-found: true # Fail the action (show the action run as red) if the command is not found in the comments from someone in the approver team"
         post-successful-approval-comment: true # Boolean whether to post successful approval comment
         successful-approval-comment: ':tada:  You were able to run the workflow because someone left an approval in the comments!! :tada:' # Comment to post if there is an approval is found
