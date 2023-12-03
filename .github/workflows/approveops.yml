@@ -17,7 +17,7 @@ jobs:
         private-key: ${{ secrets.APP_PRIVATE_KEY }}
         
     - name: ApproveOps - ApproveOps in IssueOps
-      uses: joshjohanning/approveops@check-team-exists
+      uses: joshjohanning/approveops@v2
       id: check-approval
       with:
         token: ${{ steps.app-token.outputs.token }} # use a github app token or a PAT
